@@ -6,7 +6,7 @@ export interface State {
     dictionaries: fromDictionaries.DictionariesState;
 };
 
-export const reducers: ActionReducerMap<State> = {
+export const reducers: ActionReducerMap<State, fromDictionaries.All> = {
     dictionaries: fromDictionaries.reducer
 };
 

@@ -3,14 +3,14 @@ import * as fromActions from './dictionaries.actions';
 
 export interface DictionariesState {
     entities: Dictionaries | null;
-    loading: boolean | null;
-    error: string | null;
+    loading: boolean;
+    error: string;
 }
 
 const initialState: DictionariesState = {
     entities: null,
-    loading: null,
-    error: null
+    loading: false,
+    error: ''
 }
 
 export function reducer(
@@ -19,7 +19,7 @@ export function reducer(
 ): DictionariesState {
     switch(action.type) {
         case fromActions.Types.READ: {
-            return { ...state, loading: true, error: null }
+            return { ...state, loading: true, error: '' }
         }
 
         case fromActions.Types.READ_SUCCESS: {

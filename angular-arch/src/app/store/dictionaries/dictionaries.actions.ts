@@ -19,7 +19,7 @@ export class ReadSuccess implements Action {
 
 export class ReadError implements Action {
     readonly type = Types.READ_ERROR;
-    constructor(public error = '') {}
+    constructor(public error: string) {}
 }
 
 export type All = Read | ReadSuccess | ReadError;
