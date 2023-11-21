@@ -7,8 +7,8 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as fromActions from './user.actions';
 import { EmailPasswordCredentials, User } from './user.models';
 
-import { environment } from '@src/environments/environment';
 import { NotificationService } from '@app/services';
+import { environment } from '@env/environment';
 
 type Action = fromActions.All;
 
@@ -22,6 +22,22 @@ export class UserEffects {
         private notifications: NotificationService
     ) {}
 
+    init: Observable<Action> = createEffect(() => this.actions.pipe(
+        ofType(fromActions.Types.INIT),
+        switchMap(() => this.afAuth.authState.pipe(take(1))),
+        switchMap(authState => {
+            if(authState) {
+                return this.afs.doc<User>(`users/${authState.uid}`).valueChanges().pipe(
+                    take(1),
+                    map(user => new fromActions.InitAuthorized(authState.uid, user || null)),
+                    catchError(err => of(new fromActions.InitError(err)))
+                )
+            } else {
+                return of(new fromActions.InitUnauthorized());
+            }
+        })
+    ));
+
     signUpEmail: Observable<Action> = createEffect(() => this.actions.pipe(
         ofType(fromActions.Types.SIGN_UP_EMAIL),
         map((action: fromActions.SignUpEmail) => action.credentials),
@@ -29,7 +45,10 @@ export class UserEffects {
             from(this.afAuth.createUserWithEmailAndPassword(credentials.email, credentials.password)).pipe(
                 tap(() => {
                     this.afAuth.currentUser
-                        .then((user) => user?.sendEmailVerification(environment.actionCodeSettings))
+                        .then((user) => { 
+                            user?.sendEmailVerification(environment.actionCodeSettings)
+                            this.router.navigate(['/auth/email-confirm']);
+                        })
                         .catch((error) => this.notifications.error(error.message));
                 }),
                 map((signUpState) => signUpState.user ? new fromActions.SignUpEmailSuccess(signUpState.user.uid) : new fromActions.SignUpEmailError('error')),
@@ -50,6 +69,9 @@ export class UserEffects {
                 switchMap((signInState) => 
                     this.afs.doc<User>(`users/${signInState.user?.uid}`).valueChanges().pipe(
                         take(1),
+                        tap(() => {
+                            this.router.navigate(['/']);
+                        }),
                         map((user) => new fromActions.SignInEmailSuccess(signInState.user? signInState.user.uid : '', user || null))
                     )
                 ),

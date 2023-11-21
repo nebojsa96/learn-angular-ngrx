@@ -8,7 +8,10 @@
         "app/*"
       ],
       "@src/*": [
-        "*"
+        "./*"
+      ],
+      "@env/*": [
+        "environments/*"
       ]
     },
     "outDir": "./dist/out-tsc",

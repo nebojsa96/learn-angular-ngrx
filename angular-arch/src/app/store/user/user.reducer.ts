@@ -17,6 +17,23 @@ const initialState: UserState = {
 
 export function reducer(state = initialState, action: fromActions.All): UserState {
     switch(action.type) {
+        // Init
+        case fromActions.Types.INIT: {
+            return { ...state, loading: true }
+        }
+
+        case fromActions.Types.INIT_AUTHORIZED: {
+            return { ...state, entity: (action as fromActions.InitAuthorized).user, uid: (action as fromActions.InitAuthorized).uid, loading: false, error: null }
+        }
+
+        case fromActions.Types.INIT_UNAUTHORIZED: {
+            return { ...state, entity: null, loading: false, error: null }
+        }
+
+        case fromActions.Types.INIT_ERROR: {
+            return { ...state, error: (action as fromActions.InitError).error, loading: false }
+        }
+
         // Sign In
         case fromActions.Types.SIGN_IN_EMAIL: {
             return { ...state, loading: true, error: '' }
@@ -49,7 +66,7 @@ export function reducer(state = initialState, action: fromActions.All): UserStat
         }
 
         case fromActions.Types.SIGN_OUT_SUCCESS: {
-            return { ...state };
+            return { ...state, entity: null, uid: null, loading: false, error: '' };
         }
         
         case fromActions.Types.SIGN_OUT_ERROR: {
