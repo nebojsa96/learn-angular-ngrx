@@ -11,7 +11,7 @@ export const environment = {
         measurementId: "G-RCY4HD3D21"
     },
     actionCodeSettings: {
-        url: 'http://localhost:5200/demo',
+        url: 'http://localhost:5200/profile/new',
         handleCodeInApp: true
     }
 }

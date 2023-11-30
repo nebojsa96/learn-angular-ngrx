@@ -1,0 +1,18 @@
+{
+  "editor.defaultFormatter": "exceptionptr.vscode-prettier-eslint",
+  "editor.formatOnType": false, // required
+  "editor.formatOnPaste": false, // optional
+  "editor.formatOnSave": false, // optional
+  "editor.formatOnSaveMode": "file", // required to format on save
+  "files.autoSave": "onFocusChange", // optional but recommended
+  "vscode-prettier-eslint.prettierLast": false, // set as "true" to run 'prettier' last not first
+  "[typescript]": {
+    "editor.defaultFormatter": "exceptionptr.vscode-prettier-eslint"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "exceptionptr.vscode-prettier-eslint"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "exceptionptr.vscode-prettier-eslint"
+  }
+}
