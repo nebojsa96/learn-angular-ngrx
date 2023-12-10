@@ -3,10 +3,10 @@
     <h1>New Profile</h1>
   </div>
   <div class="app-page__content">
-    <app-stepper>
+    <app-stepper *ngIf="dictionariesIsReady$ | async">
       <ng-container [ngSwitch]="stepper.activeStep.key">
-        <app-personal *ngSwitchCase="'personal'">Personal</app-personal>
-        <app-professional *ngSwitchCase="'professional'">Professional</app-professional>
+        <app-personal *ngSwitchCase="'personal'" [dictionaries]="dictionaries$ | async" (changed)="onChangedPersonal($event)">Personal</app-personal>
+        <app-professional *ngSwitchCase="'professional'" [dictionaries]="dictionaries$ | async" (changed)="onChangedProfessional($event)">Professional</app-professional>
       </ng-container>
     </app-stepper>
   </div>
