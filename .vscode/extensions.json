@@ -1,5 +1,9 @@
 {
     "recommendations": [
-        "orta.vscode-jest"
+        "johnpapa.angular-essentials",
+        "streetsidesoftware.code-spell-checker",
+        "exceptionptr.vscode-prettier-eslint",
+        "esbenp.prettier-vscode",
+        "pkief.material-icon-theme"
     ]
 }
