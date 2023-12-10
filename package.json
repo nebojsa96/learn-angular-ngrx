@@ -1,6 +1,6 @@
 {
   "dependencies": {
     "@angular/cli": "^16.2.0",
-    "firebase-tools": "^12.4.7"
+    "firebase-tools": "^0.1.6"
   }
 }
