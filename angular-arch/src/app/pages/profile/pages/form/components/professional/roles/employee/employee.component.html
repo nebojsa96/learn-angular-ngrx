@@ -1,1 +1,36 @@
-<p>employee works!</p>
+<ng-container *ngIf="form">
+  <form [formGroup]="form" novalidate autocomplete="off">
+    <app-form-field
+      label="Expected salary"
+      [required]="true"
+      [control]="form.controls['expectedSalary']"
+    >
+      <app-input formControlName="expectedSalary"></app-input>
+    </app-form-field>
+
+    <app-form-field
+      label="Specialization"
+      [required]="true"
+      [control]="form.controls['specialization']"
+    >
+      <app-select formControlName="specialization" [items]="dictionaries ? dictionaries.specializations.controlItems : []"></app-select>
+    </app-form-field>
+
+    <app-form-field
+      label="Qualification"
+      [required]="true"
+      [control]="form.controls['qualification']"
+    >
+      <app-select formControlName="qualification"  [items]="dictionaries ? dictionaries.qualifications.controlItems : []"></app-select>
+    </app-form-field>
+
+    <app-form-field
+      label="Your main skills"
+      [required]="true"
+      [control]="form.controls['skills']"
+    >
+      <app-checkboxes formControlName="skills" [items]="dictionaries ? dictionaries.skills.controlItems : []"></app-checkboxes>
+    </app-form-field>
+
+  </form>
+</ng-container>

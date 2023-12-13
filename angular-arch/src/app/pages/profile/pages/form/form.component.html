@@ -4,7 +4,7 @@
   </div>
   <div class="app-page__content">
     <app-stepper *ngIf="dictionariesIsReady$ | async">
-      <ng-container [ngSwitch]="stepper.activeStep.key">
+      <ng-container *ngIf="dictionaries$ | async" [ngSwitch]="stepper.activeStep.key">
         <app-personal *ngSwitchCase="'personal'" [dictionaries]="dictionaries$ | async" (changed)="onChangedPersonal($event)">Personal</app-personal>
         <app-professional *ngSwitchCase="'professional'" [dictionaries]="dictionaries$ | async" (changed)="onChangedProfessional($event)">Professional</app-professional>
       </ng-container>

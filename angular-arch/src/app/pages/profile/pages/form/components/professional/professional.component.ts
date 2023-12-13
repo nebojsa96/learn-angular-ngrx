@@ -13,12 +13,16 @@ import { StepperService } from "../stepper/services";
 import { markFormGroupTouched, regexErrors } from "@app/shared/utils";
 import { Dictionaries } from "@app/store/dictionaries";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { RecruiterForm } from "./roles/recruiter/recruiter.component";
+import { EmployeeForm } from "./roles/employee/employee.component";
+import { Value } from "@app/models/frontend";
 
 export interface ProfessionalForm {
   about: string;
   roleId: string;
-  // role: EmployeeFrom | RecruiterForm;
-}
+  role: RecruiterForm | EmployeeForm;
+} 
+
 @Component({
   selector: "app-professional",
   templateUrl: "./professional.component.html",
@@ -26,14 +30,17 @@ export interface ProfessionalForm {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfessionalComponent implements OnInit, OnDestroy {
-  @Input() value: ProfessionalForm | null = null;
+  @Input() value?: ProfessionalForm;
   @Input() dictionaries: Dictionaries | null = null;
 
   @Output() changed: EventEmitter<ProfessionalForm> =
     new EventEmitter<ProfessionalForm>();
 
-  form: FormGroup = new FormGroup([]);
+  form!: FormGroup;
   regexErrors = regexErrors;
+  
+  employeeRole?: EmployeeForm;
+  recruiterRole?: RecruiterForm;
 
   private destroy = new Subject<void>();
 
@@ -54,15 +61,7 @@ export class ProfessionalComponent implements OnInit, OnDestroy {
           ]
         }
       ],
-      about: [
-        null,
-        {
-          updateOn: "blur",
-          validators: [
-            Validators.required
-          ]
-        }
-      ],
+      about: [null],
     });
 
     if (this.value) {
@@ -79,6 +78,14 @@ export class ProfessionalComponent implements OnInit, OnDestroy {
       }
       this.stepper[type].next(this.form.valid);
     });
+  }
+
+  onRoleChange(role: Value): void {
+    if(role === 'employee') {
+      this.employeeRole = this.value?.role as EmployeeForm;
+    } else {
+      this.recruiterRole = this.value?.role as RecruiterForm;
+    }
   }
 
   ngOnDestroy(): void {

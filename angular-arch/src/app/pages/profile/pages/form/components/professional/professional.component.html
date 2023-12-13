@@ -1,9 +1,42 @@
-<form [formGroup]="form" novalidate autocomplete="off" class="professional">
-    <app-form-field label="Select your role" [required]="true" [control]="form.controls['roleId']"
-        [patternError]="regexErrors.latinAndSpaces">
-        <app-radios formControlName="roleId" [items]="dictionaries ? dictionaries.roles.controlItems : []"></app-radios>
+<ng-container *ngIf="form">
+  <form [formGroup]="form" novalidate autocomplete="off" class="professional">
+    <app-form-field
+      label="Select your role"
+      [required]="true"
+      [control]="form.controls['roleId']"
+      [patternError]="regexErrors.latinAndSpaces"
+    >
+      <app-radios
+        formControlName="roleId"
+        [items]="dictionaries ? dictionaries.roles.controlItems : []"
+        (changed)="onRoleChange($event)"
+      ></app-radios>
     </app-form-field>
-    <app-form-field label="Tell about yourself" [required]="true" [control]="form.controls['about']">
-        <app-input formControlName="about"></app-input>
+    <app-form-field
+      label="Tell about yourself"
+      [control]="form.controls['about']"
+    >
+      <app-input formControlName="about"></app-input>
     </app-form-field>
-</form>
+
+    <ng-container
+      *ngIf="dictionaries"
+      [ngSwitch]="form.controls['roleId'].value"
+    >
+      <app-recruiter
+        *ngSwitchCase="'recruiter'"
+        [parent]="form"
+        name="role"
+        [value]="recruiterRole"
+        [dictionaries]="dictionaries"
+      ></app-recruiter>
+      <app-employee
+        *ngSwitchCase="'employee'"
+        [parent]="form"
+        name="role"
+        [value]="employeeRole"
+        [dictionaries]="dictionaries"
+      ></app-employee>
+    </ng-container>
+  </form>
+</ng-container>
