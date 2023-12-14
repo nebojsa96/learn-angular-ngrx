@@ -9,11 +9,18 @@
     </app-form-field>
 
     <app-form-field
+      label="Experience"
+      [required]="true"
+    >
+      <app-experiences [parent]="form" [values]="value?.experiences" name="experiences"></app-experiences>
+    </app-form-field>
+
+    <app-form-field
       label="Specialization"
       [required]="true"
       [control]="form.controls['specialization']"
     >
-      <app-select formControlName="specialization" [items]="dictionaries ? dictionaries.specializations.controlItems : []"></app-select>
+      <app-select formControlName="specialization" [items]="controls['specialization'].items ? controls['specialization'].items : []" (changed)="(controls['specialization'].changed!)()"></app-select>
     </app-form-field>
 
     <app-form-field
@@ -21,7 +28,7 @@
       [required]="true"
       [control]="form.controls['qualification']"
     >
-      <app-select formControlName="qualification"  [items]="dictionaries ? dictionaries.qualifications.controlItems : []"></app-select>
+      <app-select formControlName="qualification"  [items]="controls['qualification'].items ? controls['qualification'].items : []"></app-select>
     </app-form-field>
 
     <app-form-field
@@ -29,7 +36,7 @@
       [required]="true"
       [control]="form.controls['skills']"
     >
-      <app-checkboxes formControlName="skills" [items]="dictionaries ? dictionaries.skills.controlItems : []"></app-checkboxes>
+      <app-checkboxes formControlName="skills" [items]="controls['skills'].items ? controls['skills'].items : []"></app-checkboxes>
     </app-form-field>
 
   </form>

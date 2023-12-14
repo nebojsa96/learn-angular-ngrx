@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, catchError, from, map, of, switchMap, take, tap } from 'rxjs';
+import { Observable, catchError, from, map, of, switchMap, take, tap, withLatestFrom } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -9,6 +9,7 @@ import { EmailPasswordCredentials, User } from './user.models';
 
 import { NotificationService } from '@app/services';
 import { environment } from '@env/environment';
+import { FieldValue } from 'firebase/firestore';
 
 type Action = fromActions.All;
 
@@ -89,6 +90,37 @@ export class UserEffects {
             from(this.afAuth.signOut()).pipe(
                 map(() => new fromActions.SignOutSuccess()),
                 catchError((error) => of(new fromActions.SignOutError(error.message)))
+            )
+        )
+    ));
+
+    create: Observable<Action> = createEffect(() => this.actions.pipe(
+        ofType(fromActions.Types.CREATE),
+        map((action: fromActions.Create) => action.user),
+        withLatestFrom(this.afAuth.authState.pipe(take(1))),
+        map(([user, state]) => ({
+            ...user,
+            uid: state?.uid ? state.uid : '',
+            email: state?.email ? state.email : '',
+            created: { isEqual: () => true } as FieldValue
+        })), //TODO: fix created: firestore.FieldValue.serverTimestamp()
+        switchMap((user: User) => 
+            from(this.afs.collection('users').doc(user.uid).set(user)).pipe(
+                tap(() => this.router.navigate(['/profile', user.uid])),
+                map(() => new fromActions.CreateSuccess(user)),
+                catchError(err => of(new fromActions.CreateError(err.message)))
+            )
+        )
+    ));
+
+    update: Observable<Action> = createEffect(() => this.actions.pipe(
+        ofType(fromActions.Types.UPDATE),
+        map((action: fromActions.Update) => action.user),
+        switchMap((user: User) => 
+            from(this.afs.collection('users').doc(user.uid).set(user)).pipe(
+                tap(() => this.router.navigate(['/profile', user.uid])),
+                map(() => new fromActions.UpdateSuccess(user)),
+                catchError(err => of(new fromActions.UpdateError(err.message)))
             )
         )
     ));

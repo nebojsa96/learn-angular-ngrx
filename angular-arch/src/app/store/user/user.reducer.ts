@@ -73,6 +73,32 @@ export function reducer(state = initialState, action: fromActions.All): UserStat
             return { ...state, loading: false, error: (action as fromActions.SignOutError).error };
         }
 
+        // Create
+        case fromActions.Types.CREATE: {
+            return {...state, loading: true, error: ''};
+        }
+        
+        case fromActions.Types.CREATE_SUCCESS: {
+            return {...state, entity: (action as fromActions.CreateSuccess).user, loading: false, error: ''};
+        }
+
+        case fromActions.Types.CREATE_ERROR: {
+            return {...state, loading: false, error: (action as fromActions.CreateError).error};
+        }
+
+        // Update
+        case fromActions.Types.UPDATE: {
+            return {...state, loading: true, error: ''};
+        }
+        
+        case fromActions.Types.UPDATE_SUCCESS: {
+            return {...state, entity: (action as fromActions.UpdateSuccess).user, loading: false, error: ''};
+        }
+
+        case fromActions.Types.UPDATE_ERROR: {
+            return {...state, loading: false, error: (action as fromActions.UpdateError).error};
+        }
+
         default: {
             return state;
         }

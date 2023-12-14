@@ -1,13 +1,9 @@
 import { Component, Input, OnInit, OnDestroy } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Dictionaries } from "@app/store/dictionaries";
-
 export interface RecruiterForm {
-  specialization: string;
-  skills: string[];
-  qualification: string;
-  expectedSalary: number;
-  //experiences
+  companyName: string;
+  employeesCount: number;
 }
 
 @Component({

@@ -1,4 +1,4 @@
-import * as env from './environment.dev';
+import { environment as env }  from './environment.dev';
 
 export const environment = {
     ...env
